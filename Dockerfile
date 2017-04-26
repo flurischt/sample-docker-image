@@ -34,8 +34,11 @@ RUN mkdir -p /opt/z3 && cd /opt/z3 && wget https://github.com/Z3Prover/z3/releas
 # build apron from sample repo, then remove repo
 RUN cd /tmp && hg clone https://flurischt@bitbucket.org/flurischt/sample && cd sample/Apron/apron && make && make install && cd /tmp && rm -rf sample
 
-# Define working directory
-WORKDIR /root
+# create a user with uid 1000
+RUN useradd -d "/home/sample" -u 1000 -m -s /bin/bash sample
+WORKDIR /home/sample
+
+USER sample
 
 # make sure the apron libs are found
 ENV LD_LIBRARY_PATH=/usr/local/lib
