@@ -8,15 +8,18 @@ FROM  openjdk:8
 ENV SCALA_VERSION 2.12.1
 ENV SBT_VERSION 0.13.13
 
+# create a user with uid 1000
+RUN useradd -d "/home/sample" -u 1000 -m -s /bin/bash sample
+
 # Scala expects this file
 RUN touch /usr/lib/jvm/java-8-openjdk-amd64/release
 
 # Install Scala
 ## Piping curl directly in tar
 RUN \
-  curl -fsL http://downloads.typesafe.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.tgz | tar xfz - -C /root/ && \
-  echo >> /root/.bashrc && \
-  echo 'export PATH=~/scala-$SCALA_VERSION/bin:$PATH' >> /root/.bashrc
+  curl -fsL http://downloads.typesafe.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.tgz | tar xfz - -C /home/sample/ && \
+  echo >> /home/sample/.bashrc && \
+  echo 'export PATH=~/scala-$SCALA_VERSION/bin:$PATH' >> /home/sample/.bashrc
 
 # Install sbt
 RUN \
@@ -34,12 +37,9 @@ RUN mkdir -p /opt/z3 && cd /opt/z3 && wget https://github.com/Z3Prover/z3/releas
 # build apron from sample repo, then remove repo
 RUN cd /tmp && hg clone https://flurischt@bitbucket.org/flurischt/sample && cd sample/Apron/apron && make && make install && cd /tmp && rm -rf sample
 
-# create a user with uid 1000
-RUN useradd -d "/home/sample" -u 1000 -m -s /bin/bash sample
-WORKDIR /home/sample
 
+WORKDIR /home/sample
 USER sample
 
 # make sure the apron libs are found
 ENV LD_LIBRARY_PATH=/usr/local/lib
-
