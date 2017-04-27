@@ -42,8 +42,5 @@ RUN chmod 777 /tmp
 WORKDIR /home/sample
 USER sample
 
-# run sbt once to download it while generating the image
-RUN sbt info
-
 # make sure the apron libs are found
 ENV LD_LIBRARY_PATH=/usr/local/lib
