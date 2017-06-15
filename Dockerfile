@@ -43,7 +43,7 @@ WORKDIR /home/sample
 USER sample
 
 # force download of the sbt version we'll need when running the container
-RUN cd /tmp/sample && sbt
+RUN cd /tmp/sample && sbt -batch info; exit 0
 
 USER ROOT
 RUN rm -rf /tmp/sample
