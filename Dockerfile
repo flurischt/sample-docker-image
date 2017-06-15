@@ -42,8 +42,5 @@ RUN chmod 777 /tmp
 WORKDIR /home/sample
 USER sample
 
-# run sbt to download the jars into the image too
-RUN cd /tmp && sbt info; exit 0
-
 # make sure the apron libs are found
 ENV LD_LIBRARY_PATH=/usr/local/lib
