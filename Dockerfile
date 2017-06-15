@@ -35,11 +35,19 @@ RUN apt-get install libgomp1 libgmp-dev libmpfr-dev libppl-dev openjdk-8-jdk bui
 
 RUN mkdir -p /opt/z3 && cd /opt/z3 && wget https://github.com/Z3Prover/z3/releases/download/z3-4.5.0/z3-4.5.0-x64-debian-8.5.zip && unzip z3-4.5.0-x64-debian-8.5.zip && ln -s `pwd`/z3-4.5.0-x64-debian-8.5/bin/z3 /usr/bin/z3
 # build apron from sample repo, then remove repo
-RUN cd /tmp && hg clone https://flurischt@bitbucket.org/flurischt/sample && cd sample/Apron/apron && make && make install && cd /tmp && rm -rf sample
+RUN cd /tmp && hg clone https://flurischt@bitbucket.org/flurischt/sample && cd sample/Apron/apron && make && make install
 # fix permissions that were broken by apron makefile
 RUN chmod 777 /tmp
 
 WORKDIR /home/sample
+USER sample
+
+# force download of the sbt version we'll need when running the container
+RUN cd /tmp/sample && sbt info
+
+USER ROOT
+RUN rm -rf /tmp/sample
+
 USER sample
 
 # make sure the apron libs are found
