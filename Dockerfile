@@ -31,7 +31,7 @@ RUN \
   sbt sbtVersion
 
 # now install Z3 and build apron from the sample repo
-RUN apt-get install libgomp1 libgmp-dev libmpfr-dev libppl-dev openjdk-8-jdk build-essential -y
+RUN apt-get install libgomp1 libgmp-dev libmpfr-dev libppl-dev openjdk-8-jdk build-essential mono-devel -y
 
 RUN mkdir -p /opt/z3 && cd /opt/z3 && wget https://github.com/Z3Prover/z3/releases/download/z3-4.5.0/z3-4.5.0-x64-debian-8.5.zip && unzip z3-4.5.0-x64-debian-8.5.zip && ln -s `pwd`/z3-4.5.0-x64-debian-8.5/bin/z3 /usr/bin/z3
 # build apron from sample repo, then remove repo
@@ -39,8 +39,15 @@ RUN cd /tmp && hg clone https://flurischt@bitbucket.org/flurischt/sample && cd s
 # fix permissions that were broken by apron makefile
 RUN chmod 777 /tmp
 
+# install boogie
+WORKDIR /usr/src
+RUN wget "http://download-codeplex.sec.s-msft.com/Download/Release?ProjectName=boogie&DownloadId=518016&FileTime=129954091212230000&Build=21050" -O Boogie.zip
+RUN mkdir boogie && mv Boogie.zip boogie/ && cd boogie && unzip Boogie.zip
+
 WORKDIR /home/sample
 USER sample
 
 # make sure the apron libs are found
 ENV LD_LIBRARY_PATH=/usr/local/lib
+ENV Z3_EXE=/usr/bin/z3
+ENV BOOGIE_EXE="mono /usr/src/boogie/Boogie.exe"
