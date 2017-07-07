@@ -55,13 +55,7 @@ RUN chmod 777 /tmp
 # Install Mono.
 RUN apt-get install -y mono-devel tzdata
 
-# install boogie
-#WORKDIR /usr/src
-#RUN wget "http://download-codeplex.sec.s-msft.com/Download/Release?ProjectName=boogie&DownloadId=518016&FileTime=129954091212230000&Build=21050" -O Boogie.zip
-#RUN mkdir boogie && mv Boogie.zip boogie/ && cd boogie && unzip Boogie.zip
-#RUN printf '#!/bin/sh\n/usr/bin/mono %s/Boogie.exe "$@"\n' `pwd`/boogie > boogie/boogie && chmod +x boogie/boogie
-#RUN ln -s /usr/bin/z3 /usr/src/boogie/z3.exe
-# Install Boogie.
+# install Boogie
 RUN wget --no-verbose 'https://github.com/boogie-org/boogie/archive/f085c05a5c49c730ca28be74b79d080f05f0b72e.zip' -O /tmp/boogie.zip && \
     cd /tmp && \
     unzip -q boogie.zip && \
