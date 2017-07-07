@@ -1,6 +1,7 @@
 #
 # most of this is copied from:
-# https://github.com/hseeberger/scala-sbt
+# https://github.com/hseeberger/scala-sbt (Apache license) and
+# https://bitbucket.org/viperproject/viper-linux-dev-docker/src (MIT license)
 #
 
 FROM  openjdk:8
